@@ -13,6 +13,9 @@ const FormularioPeliculas = () => {
     const [idioma, setIdioma] = useState('')
     const [productora, setProductora] = useState('')
     const [dataPeliculas, setDataPeliculas] = useState([])
+    const [modoEdicion, setModoEdicion] = useState(false)
+    const [id, setId] = useState('')
+    const [error, setError] = useState(null)
 
     useEffect(()=>{
 
@@ -72,6 +75,8 @@ const FormularioPeliculas = () => {
         setProduccion('')
         setIdioma('')
         setProductora('')  
+        setModoEdicion(false)
+        setError(null)
     }
 
     const eliminar= async (id) =>{
@@ -84,6 +89,62 @@ const FormularioPeliculas = () => {
             console.log(error)
         }
     }
+    
+
+    const auxEditar = (item) =>{
+        setPelicula(item.nombrePelicula)
+        setPaisProduccion(item.nombrePaisProduccion)
+        setAñoProduccion(item.nombreAño)
+        setGenero(item.nombreGenero)
+        setPaisProduccion(item.nombreProduccion)
+        setIdioma(item.nombreIdioma)
+        setProductora(item.nombreProductora)
+        setModoEdicion(true)
+        setId(item.id)
+    }
+
+    const editar = async e =>{
+        e.preventDefault()
+       
+        try{
+            const db= firebase.firestore()
+            await db.collection('películas').doc(id).update({
+                nombrePelicula: pelicula,
+                nombrePaisProduccion: paisProduccion,
+                nombreAño:añoProduccion,
+                nombreGenero:genero,
+                nombreProduccion:produccion,
+                nombreIdioma:idioma,
+                nombreProductora:productora
+            })
+
+           
+        }catch(error){
+            console.log(error)
+        }
+        setPelicula('')
+        setPaisProduccion('')
+        setAñoProduccion('')
+        setGenero('')
+        setProduccion('')
+        setIdioma('')
+        setProductora('')  
+        setModoEdicion(false)
+        setError(null)
+
+    }
+
+    const cancelar =()=>{
+        setPelicula('')
+        setPaisProduccion('')
+        setAñoProduccion('')
+        setGenero('')
+        setProduccion('')
+        setIdioma('')
+        setProductora('')  
+        setModoEdicion(false)
+        setError(null)
+    }
 
     return (
         <div className='container mt-5'>
@@ -92,8 +153,17 @@ const FormularioPeliculas = () => {
             <div className='row'>
 
             <div>
-                    <h4 className='text-center'>Insertar Peliculas</h4>
-                    <form onSubmit={insertar}>
+                    <h4 className='text-center'> 
+                    {
+                        modoEdicion ? 'Editar Peliculas': 'Agregar Peliculas'
+                    }
+                    </h4>
+
+                    <form onSubmit={modoEdicion ? editar: insertar}>
+                    {
+                     error ? <span className='text-danger'>{error}</span> : null
+                    }
+
                     <input
                     className='form-control mb-2'
                     type="text"
@@ -136,7 +206,17 @@ const FormularioPeliculas = () => {
                     placeholder='Ingrese productora'
                     onChange={(e)=>setProductora(e.target.value)}
                     />
-                    <button type='submit'>Agregar</button>
+                    {
+                    !modoEdicion? (
+                        <button className='btn btn-primary btn-block' type='submit'>Insertar</button>
+                     )
+                     :
+                     (  <>
+                        <button className='btn btn-warning btn-block' type='submit'>Editar</button>
+                        <button className='btn btn-dark btn-block mx-2' onClick={() => cancelar()}>Cancelar</button>
+                        </>
+                     )
+                    }
 
                 </form>
                 </div>
@@ -157,7 +237,7 @@ const FormularioPeliculas = () => {
                                     {item.nombreProductora}
                                     </span>
                                 <button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button>
-                                <button className='btn btn-warning btn-sm float-end' >editar</button>
+                                <button className='btn btn-warning btn-sm float-end' onClick={()=> auxEditar(item)} >editar</button>
                             </li>
                         ))
                     }
