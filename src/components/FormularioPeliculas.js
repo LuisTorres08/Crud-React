@@ -22,7 +22,7 @@ const FormularioPeliculas = () => {
                 const data = await db.collection('películas').get()
                 const array = data.docs.map(item =>(
                     {
-                        ...item.data()
+                        id:item.id, ...item.data()
                     }
                 ))
                 setDataPeliculas(array)
@@ -74,6 +74,17 @@ const FormularioPeliculas = () => {
         setProductora('')  
     }
 
+    const eliminar= async (id) =>{
+        try{
+            const db = firebase.firestore()
+            await db.collection('películas').doc(id).delete()
+            const aux = dataPeliculas.filter(item => item.id !== id)
+            setDataPeliculas(aux)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     return (
         <div className='container mt-5'>
             <h1 className='text-center'>Ficha tecnica de una pelicula</h1>
@@ -108,12 +119,13 @@ const FormularioPeliculas = () => {
                     onChange={(e)=>setGenero(e.target.value)}
                     />
                      <input
-                     className='form-control mb-2'
+                    className='form-control mb-2'
                     type="text"
                     placeholder='Ingrese produccion'
                     onChange={(e)=>setProduccion(e.target.value)}
                     />
                      <input
+                    className='form-control mb-2'
                     type="text"
                     placeholder='Ingrese idioma'
                     onChange={(e)=>setIdioma(e.target.value)}
@@ -144,7 +156,7 @@ const FormularioPeliculas = () => {
                                     {item.nombreIdioma} -
                                     {item.nombreProductora}
                                     </span>
-                                <button className='btn btn-danger btn-sm float-end mx-2' >Eliminar</button>
+                                <button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button>
                                 <button className='btn btn-warning btn-sm float-end' >editar</button>
                             </li>
                         ))
