@@ -41,6 +41,41 @@ const FormularioPeliculas = () => {
     const insertar = async (e) =>{
         e.preventDefault()
 
+        if(!pelicula.trim()){
+            setError('Campo pelicula vacío')
+            return
+        }
+
+        if(!paisProduccion.trim()){
+            setError('Campo pais producción vacío')
+            return
+        }
+
+        if(!añoProduccion.trim()){
+            setError('Campo año producción vacío')
+            return
+        }
+
+        if(!genero.trim()){
+            setError('Campo genero vacío')
+            return
+        }
+
+        if(!produccion.trim()){
+            setError('Campo producción vacío')
+            return
+        }
+
+        if(!idioma.trim()){
+            setError('Campo idioma vacío')
+            return
+        }
+
+        if(!productora.trim()){
+            setError('Campo productora vacío')
+            return
+        }
+
         try{
             const db = firebase.firestore()
             const nuevapelicula = {
@@ -91,7 +126,7 @@ const FormularioPeliculas = () => {
     }
     
 
-    const auxEditar = (item) =>{
+    const editar = (item) =>{
         setPelicula(item.nombrePelicula)
         setPaisProduccion(item.nombrePaisProduccion)
         setAñoProduccion(item.nombreAño)
@@ -103,8 +138,44 @@ const FormularioPeliculas = () => {
         setId(item.id)
     }
 
-    const editar = async e =>{
+    const editarPelicula = async e =>{
         e.preventDefault()
+
+        
+        if(!pelicula.trim()){
+            setError('Campo pelicula vacío')
+            return
+        }
+
+        if(!paisProduccion.trim()){
+            setError('Campo pais producción vacío')
+            return
+        }
+
+        if(!añoProduccion.trim()){
+            setError('Campo año producción vacío')
+            return
+        }
+
+        if(!genero.trim()){
+            setError('Campo genero vacío')
+            return
+        }
+
+        if(!produccion.trim()){
+            setError('Campo producción vacío')
+            return
+        }
+
+        if(!idioma.trim()){
+            setError('Campo idioma vacío')
+            return
+        }
+
+        if(!productora.trim()){
+            setError('Campo productora vacío')
+            return
+        }
        
         try{
             const db= firebase.firestore()
@@ -159,7 +230,7 @@ const FormularioPeliculas = () => {
                     }
                     </h4>
 
-                    <form onSubmit={modoEdicion ? editar: insertar}>
+                    <form onSubmit={modoEdicion ? editarPelicula: insertar}>
                     {
                      error ? <span className='text-danger'>{error}</span> : null
                     }
@@ -167,43 +238,43 @@ const FormularioPeliculas = () => {
                     <input
                     className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese pelicula'
+                    placeholder='Ingrese la pelicula'
                     onChange={(e)=>setPelicula(e.target.value)}
                     />
                      <input
                      className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese pais'
+                    placeholder='Ingrese el pais de producción '
                     onChange={(e)=>setPaisProduccion(e.target.value)}
                     />
                      <input
                      className='form-control mb-2'
                     type="number"
-                    placeholder='Ingrese año'
+                    placeholder='Ingrese el año de producción '
                     onChange={(e)=>setAñoProduccion(e.target.value)}
                     />
                      <input
                      className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese genero'
+                    placeholder='Ingrese el genero'
                     onChange={(e)=>setGenero(e.target.value)}
                     />
                      <input
                     className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese produccion'
+                    placeholder='Ingrese la produccion'
                     onChange={(e)=>setProduccion(e.target.value)}
                     />
                      <input
                     className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese idioma'
+                    placeholder='Ingrese el idioma'
                     onChange={(e)=>setIdioma(e.target.value)}
                     />
                      <input
                      className='form-control mb-2'
                     type="text"
-                    placeholder='Ingrese productora'
+                    placeholder='Ingrese la productora'
                     onChange={(e)=>setProductora(e.target.value)}
                     />
                     {
@@ -237,7 +308,7 @@ const FormularioPeliculas = () => {
                                     {item.nombreProductora}
                                     </span>
                                 <button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button>
-                                <button className='btn btn-warning btn-sm float-end' onClick={()=> auxEditar(item)} >editar</button>
+                                <button className='btn btn-warning btn-sm float-end' onClick={()=> editar(item)} >editar</button>
                             </li>
                         ))
                     }
