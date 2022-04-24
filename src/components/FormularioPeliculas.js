@@ -1,5 +1,6 @@
 
 
+import { nanoid } from 'nanoid'
 import React, { useEffect, useState } from 'react'
 import {firebase} from '../firebase'
 
@@ -89,7 +90,7 @@ const FormularioPeliculas = () => {
             }
             await db.collection('películas').add(nuevapelicula)
             setDataPeliculas([...dataPeliculas,
-                {
+                {   id:nanoid(),
                     nombrePelicula: pelicula,
                     nombrePaisProduccion: paisProduccion,
                     nombreAño:añoProduccion,
@@ -234,65 +235,134 @@ const FormularioPeliculas = () => {
                     {
                      error ? <span className='text-danger'>{error}</span> : null
                     }
+                    <div className='row'>
+                        <div className='col-4'>
+                         <label>Pelicula</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese la pelicula'
+                            onChange={(e)=>setPelicula(e.target.value)}
+                            />
+                        </div>
 
-                    <input
-                    className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese la pelicula'
-                    onChange={(e)=>setPelicula(e.target.value)}
-                    />
-                     <input
-                     className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese el pais de producción '
-                    onChange={(e)=>setPaisProduccion(e.target.value)}
-                    />
-                     <input
-                     className='form-control mb-2'
-                    type="number"
-                    placeholder='Ingrese el año de producción '
-                    onChange={(e)=>setAñoProduccion(e.target.value)}
-                    />
-                     <input
-                     className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese el genero'
-                    onChange={(e)=>setGenero(e.target.value)}
-                    />
-                     <input
-                    className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese la produccion'
-                    onChange={(e)=>setProduccion(e.target.value)}
-                    />
-                     <input
-                    className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese el idioma'
-                    onChange={(e)=>setIdioma(e.target.value)}
-                    />
-                     <input
-                     className='form-control mb-2'
-                    type="text"
-                    placeholder='Ingrese la productora'
-                    onChange={(e)=>setProductora(e.target.value)}
-                    />
+                        <div className='col-4'>
+                         <label>Pais</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese el pais de producción '
+                            onChange={(e)=>setPaisProduccion(e.target.value)}
+                            />
+                            
+                        </div>
+
+                        <div className='col-4'>
+                         <label>Año</label>
+                            <input
+                            className='form-control mb-2'
+                            type="number"
+                            placeholder='Ingrese el año de producción '
+                            onChange={(e)=>setAñoProduccion(e.target.value)}
+                            />
+                            
+                        </div>
+
+                        <div className='col-4'>
+                         <label>Genero</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese el genero'
+                            onChange={(e)=>setGenero(e.target.value)}
+                            />
+                            
+                        </div>
+
+                        <div className='col-4'>
+                         <label>Produccion</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese la produccion'
+                            onChange={(e)=>setProduccion(e.target.value)}
+                            />
+                            
+                        </div>
+
+                        <div className='col-4'>
+                         <label>Idioma</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese el idioma'
+                            onChange={(e)=>setIdioma(e.target.value)}
+                            />
+                            
+                        </div>
+
+                        <div className='col-4'>
+                         <label>Productora</label>
+                            <input
+                            className='form-control mb-2'
+                            type="text"
+                            placeholder='Ingrese la productora'
+                            onChange={(e)=>setProductora(e.target.value)}
+                            />
+                            
+                        </div>
+                    </div>
+                   
+                     
                     {
                     !modoEdicion? (
-                        <button className='btn btn-primary btn-block' type='submit'>Insertar</button>
+                        <button className='btn btn-success btn-block' type='submit'>Insertar</button>
                      )
                      :
                      (  <>
-                        <button className='btn btn-warning btn-block' type='submit'>Editar</button>
+                        <button className='btn btn-info btn-block' type='submit'>Editar</button>
                         <button className='btn btn-dark btn-block mx-2' onClick={() => cancelar()}>Cancelar</button>
                         </>
                      )
                     }
 
                 </form>
+                <br/>
                 </div>
+
+                <table className='table table-bordered'>
+                    <thead>
+                        <tr>
+                            <th>Pelicula</th>
+                            <th>Pais produccion</th>
+                            <th>Año produccion</th>
+                            <th>Genero</th>
+                            <th>Produccion</th>
+                            <th>Idioma</th>
+                            <th>Productora</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {dataPeliculas.map(item => (
+                            <tr>
+                                <td>{item.nombrePelicula}</td>
+                                <td>{item.nombrePaisProduccion}</td>
+                                <td>{item.nombreAño}</td>
+                                <td>{item.nombreGenero}</td>
+                                <td>{item.nombreProduccion}</td>
+                                <td>{item.nombreIdioma}</td>
+                                <td>{item.nombreProductora}</td>
+                                <td><button className='btn btn-danger btn-sm float-end mx-2' onClick={()=> eliminar(item.id)}>Eliminar</button></td>
+                                <td> <button className='btn btn-warning btn-sm float-end' onClick={()=> editar(item)} >editar</button></td>
+                            </tr>
+                        ))
+                        }
+                    </tbody>
+                </table>
                 
-                <div className="col text-center">
+                {/* <div className="col text-center">
                     <h4 className="text-center">Listado Peliculas</h4>
                     <ul className="col-sm- list-group">
                     {
@@ -313,7 +383,7 @@ const FormularioPeliculas = () => {
                         ))
                     }
                     </ul>
-                </div>
+                </div> */}
                 
             </div>
         </div>
