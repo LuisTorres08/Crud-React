@@ -1,3 +1,4 @@
+import FormularioPeliculas from "./components/FormularioPeliculas";
 
 function App() {
   return (
@@ -5,7 +6,7 @@ function App() {
       
         
 
-        <h1>HOLA MUNDO</h1>
+        <FormularioPeliculas/>
       
 
     </>
